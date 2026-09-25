@@ -1,0 +1,2 @@
+TunnelR does not include or replace the repository's existing LICENSE.
+Keep your existing LICENSE file when copying this project into the repo.
