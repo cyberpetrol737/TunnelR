@@ -1,0 +1,18 @@
+# Relay only. Put a TLS-terminating reverse proxy (see deploy/Caddyfile.example) in front of 127.0.0.1:8080,
+# or mount a wildcard certificate and use the built-in TLS options instead (docs/DEPLOYMENT.md).
+# Required settings (TUNNELR_DOMAIN, TUNNELR_RELAY_TOKENS) come from ./.env - copy .env.example first.
+services:
+  relay:
+    build: .
+    image: tunnelr-relay:local
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      TUNNELR_RELAY_HOST: 0.0.0.0
+      TUNNELR_RELAY_PORT: "8080"
+      TUNNELR_TRUST_PROXY: "1" # a reverse proxy in front terminates TLS
+    ports:
+      - "127.0.0.1:8080:8080" # loopback only: the proxy on this host is the only way in
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
